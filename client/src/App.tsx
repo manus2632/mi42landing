@@ -4,16 +4,37 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { HelmetProvider } from "react-helmet-async";
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import Features from "./pages/Features";
+import Pricing from "./pages/Pricing";
+import About from "./pages/About";
+import Register from "./pages/Register";
+import RegisterExhausted from "./pages/RegisterExhausted";
+import VerifyEmail from "./pages/VerifyEmail";
+import Login from "./pages/Login";
 
 function Router() {
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      <Navigation />
+      <Switch>
+        <Route path={"/"} component={Home} />
+        <Route path="/features" component={Features} />
+        <Route path="/pricing" component={Pricing} />
+        <Route path="/about" component={About} />
+        <Route path="/register" component={Register} />
+        <Route path="/register/exhausted" component={RegisterExhausted} />
+        <Route path="/verify-email" component={VerifyEmail} />
+        <Route path="/login" component={Login} />
+        <Route path={"/404"} component={NotFound} />
+        {/* Final fallback route */}
+        <Route component={NotFound} />
+      </Switch>
+      <Footer />
+    </>
   );
 }
 
@@ -25,15 +46,17 @@ function Router() {
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
+      <HelmetProvider>
+        <ThemeProvider
+          defaultTheme="light"
+          // switchable
+        >
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </ThemeProvider>
+      </HelmetProvider>
     </ErrorBoundary>
   );
 }
