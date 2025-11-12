@@ -53,9 +53,9 @@
   --chart-4: oklch(0.40 0.15 25);
   --chart-5: oklch(0.30 0.16 20);
   --radius: 0.75rem;
-  --background: oklch(0.98 0.01 50);
+  --background: oklch(0.985 0.005 80);
   --foreground: oklch(0.20 0.01 0);
-  --card: oklch(0.99 0.005 40);
+  --card: oklch(0.99 0.005 80);
   --card-foreground: oklch(0.20 0.01 0);
   --popover: oklch(0.99 0.005 50);
   --popover-foreground: oklch(0.25 0.02 30);
@@ -119,6 +119,9 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h1 {
+    font-family: 'Tiempos Headline', Georgia, 'Times New Roman', serif;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),

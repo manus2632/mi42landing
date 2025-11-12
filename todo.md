@@ -92,3 +92,8 @@
 - [x] Doppelte Kopfzeile entfernen ("Mi42 Landing Page" weg)
 - [x] Logo 10x vergrößern
 - [x] Auf Server deployen
+
+## Finale Farb- und Schriftart-Anpassungen
+- [x] Hintergrundfarbe auf #FAF9F5 ändern
+- [x] Headline-Schriftart auf Serif (wie Claude.ai) ändern
+- [x] Auf Server deployen
