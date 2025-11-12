@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useEffect, useState } from "react";
 import { Mail, CheckCircle2, Loader2, AlertCircle, ArrowRight } from "lucide-react";
+import { api, handleAPIError } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function VerifyEmail() {
   const [token, setToken] = useState<string>("");
@@ -38,33 +40,21 @@ export default function VerifyEmail() {
     setStatus("verifying");
 
     try {
-      const response = await fetch("http://46.224.9.190:3001/api/auth/verify-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: verificationToken }),
-      });
+      const result = await api.verifyEmail(verificationToken);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Verifizierung fehlgeschlagen");
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         setStatus("success");
-        setRedirectUrl(data.redirectUrl || "http://46.224.9.190:3001/onboarding");
+        setRedirectUrl(result.redirectUrl || "http://46.224.9.190:3001/onboarding");
+        toast.success("Email erfolgreich verifiziert!");
       } else {
-        throw new Error(data.message || "Verifizierung fehlgeschlagen");
+        throw new Error(result.message || "Verifizierung fehlgeschlagen");
       }
     } catch (error) {
       console.error("Verification error:", error);
+      const errorMessage = handleAPIError(error);
       setStatus("error");
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Der Bestätigungs-Link ist ungültig oder abgelaufen."
-      );
+      setErrorMessage(errorMessage);
+      toast.error(errorMessage);
     }
   };
 

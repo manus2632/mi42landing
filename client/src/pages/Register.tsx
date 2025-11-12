@@ -7,12 +7,15 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { api, handleAPIError } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function Register() {
   const [, setLocation] = useLocation();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    name: "",
     companyName: "",
     acceptPrivacy: false,
   });
@@ -60,6 +63,13 @@ export default function Register() {
       newErrors.email = "Bitte verwenden Sie Ihre geschäftliche Email-Adresse. Freemail-Adressen sind nicht erlaubt.";
     }
 
+    // Name validation
+    if (!formData.name) {
+      newErrors.name = "Name ist erforderlich";
+    } else if (formData.name.length < 2) {
+      newErrors.name = "Name muss mindestens 2 Zeichen lang sein";
+    }
+
     // Password validation
     if (!formData.password) {
       newErrors.password = "Passwort ist erforderlich";
@@ -92,28 +102,17 @@ export default function Register() {
   // Check freemium availability
   const checkFreemiumAvailability = async (email: string): Promise<boolean> => {
     try {
-      // Mock API call - replace with actual API endpoint
-      const response = await fetch("http://46.224.9.190:3001/api/auth/check-freemium-availability", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Freemium-Check fehlgeschlagen");
-      }
-
-      const data = await response.json();
+      const result = await api.checkFreemiumAvailability(email);
       
-      if (!data.available) {
-        setFreemiumWarning(data);
+      if (!result.available) {
+        setFreemiumWarning(result);
         // Redirect to exhausted page
         const domain = extractDomain(email);
         setLocation(`/register/exhausted?domain=${domain}`);
         return false;
       }
 
-      setFreemiumWarning(data);
+      setFreemiumWarning(result);
       return true;
     } catch (error) {
       console.error("Freemium check error:", error);
@@ -148,32 +147,29 @@ export default function Register() {
         return;
       }
 
-      // Mock API call - replace with actual API endpoint
-      const response = await fetch("http://46.224.9.190:3001/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+      // API call to register
+      const result = await api.register({
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        companyName: formData.companyName,
+        acceptPrivacy: formData.acceptPrivacy,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registrierung fehlgeschlagen");
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         // Show success message and redirect to email verification info
-        alert("Registrierung erfolgreich! Bitte überprüfen Sie Ihre Email-Adresse.");
+        toast.success("Registrierung erfolgreich! Bitte überprüfen Sie Ihre Email-Adresse.");
         setLocation("/verify-email");
       } else {
-        throw new Error(data.message || "Registrierung fehlgeschlagen");
+        throw new Error(result.message || "Registrierung fehlgeschlagen");
       }
     } catch (error) {
       console.error("Registration error:", error);
+      const errorMessage = handleAPIError(error);
       setErrors({
-        submit: error instanceof Error ? error.message : "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+        submit: errorMessage,
       });
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -221,6 +217,25 @@ export default function Register() {
                     </AlertDescription>
                   </Alert>
                 )}
+
+                {/* Name */}
+                <div className="space-y-2">
+                  <Label htmlFor="name">Vollständiger Name *</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Max Mustermann"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className={errors.name ? "border-destructive" : ""}
+                  />
+                  {errors.name && (
+                    <p className="text-sm text-destructive flex items-center gap-2">
+                      <AlertCircle className="h-4 w-4" />
+                      {errors.name}
+                    </p>
+                  )}
+                </div>
 
                 {/* Password */}
                 <div className="space-y-2">

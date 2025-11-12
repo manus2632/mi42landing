@@ -4,6 +4,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { AlertCircle, Calendar, Mail, ArrowRight } from "lucide-react";
+import { api, handleAPIError } from "@/lib/api";
+import { toast } from "sonner";
 
 interface FreemiumUser {
   email: string;
@@ -34,19 +36,13 @@ export default function RegisterExhausted() {
 
   const fetchFreemiumUsers = async (domain: string) => {
     try {
-      const response = await fetch(
-        `http://46.224.9.190:3001/api/auth/freemium-users?domain=${domain}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Fehler beim Laden der Freemium-User");
-      }
-
-      const data = await response.json();
-      setUsers(data.users || []);
-      setResetDate(data.resetDate || "");
+      const result = await api.getFreemiumUsers(domain);
+      setUsers(result.users || []);
+      setResetDate(result.resetDate || "");
     } catch (error) {
       console.error("Error fetching freemium users:", error);
+      const errorMessage = handleAPIError(error);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -53,3 +53,13 @@
 - [x] Typografie vereinfachen und cleaner gestalten
 - [x] Spacing und Padding optimieren
 - [x] Auf Server deployen
+
+## API-Integration
+- [x] tRPC-Client installieren und konfigurieren
+- [x] API-Typen definieren
+- [x] Registrierungs-Flow mit Backend verbinden
+- [x] Freemium-Check implementieren
+- [x] Login-Funktionalität implementieren
+- [x] Email-Verifizierung implementieren
+- [x] Freemium-Exhaustion-Page mit API verbinden
+- [x] Auf Server deployen und testen

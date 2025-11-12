@@ -6,6 +6,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useState } from "react";
 import { Link } from "wouter";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { api, handleAPIError } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -44,31 +46,23 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // Mock API call - replace with actual API endpoint
-      const response = await fetch("http://46.224.9.190:3001/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      // API call to login
+      const result = await api.login(formData.email, formData.password);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Login fehlgeschlagen");
-      }
-
-      const data = await response.json();
-
-      if (data.success && data.redirectUrl) {
+      if (result.success) {
+        toast.success("Login erfolgreich! Sie werden weitergeleitet...");
         // Redirect to main application
-        window.location.href = data.redirectUrl;
+        window.location.href = "http://46.224.9.190:3001/";
       } else {
-        throw new Error(data.message || "Login fehlgeschlagen");
+        throw new Error(result.message || "Login fehlgeschlagen");
       }
     } catch (error) {
       console.error("Login error:", error);
+      const errorMessage = handleAPIError(error);
       setErrors({
-        submit: error instanceof Error ? error.message : "Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.",
+        submit: errorMessage,
       });
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
