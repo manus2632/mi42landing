@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -6,406 +8,676 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Link } from "wouter";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import {
-  BarChart3,
   TrendingUp,
+  Search,
   Users,
   Lightbulb,
-  LineChart,
-  Building2,
+  BarChart3,
+  Target,
   DollarSign,
-  Mail,
   CheckCircle2,
+  XCircle,
+  Clock,
+  AlertCircle,
+  Zap,
+  Shield,
+  Award,
   ArrowRight,
+  Star,
 } from "lucide-react";
 
 export default function Home() {
-  const agents = [
+  // A/B Test: Wechsle zwischen "frustration" und "readiness"
+  const [variant] = useState<"frustration" | "readiness">(
+    Math.random() > 0.5 ? "frustration" : "readiness"
+  );
+
+  const [quizStep, setQuizStep] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
+  const [showResults, setShowResults] = useState(false);
+
+  const quizQuestions = [
     {
-      icon: BarChart3,
-      title: "Market Analyst",
-      description: "Umfassende Marktanalysen mit Wettbewerbsvergleich und Marktanteilen",
+      question: "Wie oft scheitern deine Marktstudien an ungenauen Daten?",
+      options: ["Nie", "Selten", "Manchmal", "Oft", "Immer"],
     },
     {
-      icon: TrendingUp,
-      title: "Trend Scout",
-      description: "Identifizierung von Branchentrends und Zukunftsprognosen",
+      question: "Wie viel gibst du durchschnittlich für eine Marktstudie aus?",
+      options: ["< 1.000 €", "1.000-5.000 €", "5.000-10.000 €", "10.000-50.000 €", "> 50.000 €"],
     },
     {
-      icon: Users,
-      title: "Survey Assistant",
-      description: "Automatisierte Umfragenerstellung und Auswertung",
+      question: "Wie lange wartest du normalerweise auf Ergebnisse?",
+      options: ["< 1 Woche", "1-2 Wochen", "2-4 Wochen", "1-3 Monate", "> 3 Monate"],
     },
     {
-      icon: Lightbulb,
-      title: "Strategy Consultant",
-      description: "Strategische Beratung für Marktpositionierung und Wachstum",
+      question: "Wie oft passen die Ergebnisse nicht zu deinem Business?",
+      options: ["Nie", "Selten", "Manchmal", "Oft", "Immer"],
     },
     {
-      icon: LineChart,
-      title: "Demand Forecasting",
-      description: "Präzise Nachfrageprognosen basierend auf Marktdaten",
-    },
-    {
-      icon: Building2,
-      title: "Project Intelligence",
-      description: "Analyse von Bauprojekten und Marktchancen",
-    },
-    {
-      icon: DollarSign,
-      title: "Pricing Strategy",
-      description: "Optimale Preisstrategie basierend auf Wettbewerb und Nachfrage",
+      question: "Wie wichtig ist dir schnelle, präzise Marktforschung?",
+      options: ["Unwichtig", "Wenig wichtig", "Wichtig", "Sehr wichtig", "Kritisch"],
     },
   ];
 
-  const features = [
-    {
-      icon: Mail,
-      title: "Automatisierte Briefings",
-      description: "Täglich oder wöchentlich: Markt-Updates, Rohstoffpreise, Börsenindizes und Branchennachrichten direkt in Ihr Postfach",
-    },
-    {
-      icon: CheckCircle2,
-      title: "7 kostenlose Analysen",
-      description: "Jeder Freemium-User erhält 7 vorgefertigte Analysen aller Agenten plus 5.000 Credits",
-    },
-    {
-      icon: TrendingUp,
-      title: "Branchenspezifisch",
-      description: "Spezialisiert auf Bauzulieferindustrie: Zement, Beton, Stahl, Holz, Dämmstoffe und mehr",
-    },
-  ];
+  const handleQuizAnswer = (answerIndex: number) => {
+    const newAnswers = [...quizAnswers, answerIndex];
+    setQuizAnswers(newAnswers);
 
-  const testimonials = [
-    {
-      quote: "Mi42 hat unsere Marktforschung revolutioniert. Wir sparen 80% Zeit bei Analysen.",
-      author: "Dr. Michael Schmidt",
-      role: "Head of Strategy",
-      company: "HeidelbergCement AG",
-    },
-    {
-      quote: "Die automatisierten Briefings halten uns täglich auf dem Laufenden. Unverzichtbar!",
-      author: "Anna Müller",
-      role: "Market Intelligence Manager",
-      company: "Holcim Deutschland",
-    },
-    {
-      quote: "Präzise Nachfrageprognosen, die uns bei strategischen Entscheidungen helfen.",
-      author: "Thomas Weber",
-      role: "VP Sales & Marketing",
-      company: "Knauf Gips KG",
-    },
-  ];
+    if (quizStep < quizQuestions.length - 1) {
+      setQuizStep(quizStep + 1);
+    } else {
+      setShowResults(true);
+    }
+  };
 
-  const faqs = [
-    {
-      question: "Was ist das Freemium-Modell?",
-      answer: "Pro Firma sind 2 kostenlose Registrierungen erlaubt. Jeder Freemium-User erhält 7 kostenlose Analysen (alle Agenten) plus 5.000 Credits. Der 3. User muss sich kostenpflichtig registrieren.",
-    },
-    {
-      question: "Welche Agenten sind verfügbar?",
-      answer: "Mi42 bietet 7 spezialisierte KI-Agenten: Market Analyst, Trend Scout, Survey Assistant, Strategy Consultant, Demand Forecasting, Project Intelligence und Pricing Strategy.",
-    },
-    {
-      question: "Wie funktionieren die automatisierten Briefings?",
-      answer: "Sie erhalten täglich oder wöchentlich personalisierte Briefings mit Markt-Updates, Rohstoffpreisen, Börsenindizes und Branchennachrichten direkt per Email.",
-    },
-    {
-      question: "Kann ich jederzeit upgraden?",
-      answer: "Ja, Sie können jederzeit von Freemium zu einem kostenpflichtigen Plan wechseln und erhalten sofort Zugriff auf unbegrenzte Analysen.",
-    },
-    {
-      question: "Welche Branchen werden unterstützt?",
-      answer: "Mi42 ist spezialisiert auf die Bauzulieferindustrie: Zement, Beton, Stahl, Holz, Dämmstoffe, Fassadensysteme und weitere Baumaterialien.",
-    },
-  ];
+  const calculateScore = () => {
+    const total = quizAnswers.reduce((sum, answer) => sum + answer, 0);
+    const maxScore = quizQuestions.length * 4;
+    return Math.round((total / maxScore) * 10);
+  };
+
+  const getScoreMessage = (score: number) => {
+    if (score <= 3) return { title: "Kritisch", message: "Deine Marktforschung hat massive Probleme. Sofortiger Handlungsbedarf!", color: "text-red-600" };
+    if (score <= 6) return { title: "Verbesserungswürdig", message: "Du verlierst Zeit und Geld mit ineffizienten Prozessen.", color: "text-orange-600" };
+    return { title: "Gut, aber...", message: "Es gibt noch Potenzial für Optimierung und Kosteneinsparung.", color: "text-yellow-600" };
+  };
 
   return (
     <>
-      <SEO />
-      <div className="min-h-screen">
-        {/* Hero Section */}
+      <SEO
+        title="Market Research Agents - KI-basierte Marktforschung"
+        description="Revolutioniere deine Marktforschung mit KI-Präzision. Spare 70% Zeit und Kosten gegenüber traditionellen Studien."
+      />
+      <Navigation />
+
+      <main className="min-h-screen">
+        {/* Hero Section mit A/B-Test-Varianten */}
         <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 md:py-32">
-        <div className="container">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-              Marktforschung für die Bauzulieferindustrie –{" "}
-              <span className="text-primary">automatisiert</span>,{" "}
-              <span className="text-secondary">KI-gestützt</span>,{" "}
-              <span className="text-accent">präzise</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              7 spezialisierte KI-Agenten analysieren Märkte, Trends und Wettbewerber. Täglich automatisierte Briefings mit Rohstoffpreisen, Börsenindizes und Branchennachrichten.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/register">
-                <Button size="lg" className="text-lg px-8">
-                  Jetzt kostenlos starten
-                  <ArrowRight className="ml-2 h-5 w-5" />
+          <div className="container">
+            <div className="mx-auto max-w-4xl text-center">
+              {variant === "frustration" ? (
+                <>
+                  <Badge className="mb-6 bg-destructive/10 text-destructive hover:bg-destructive/20">
+                    <AlertCircle className="mr-2 h-4 w-4" />
+                    Problem erkannt?
+                  </Badge>
+                  <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+                    Hast du genug{" "}
+                    <span className="text-destructive">schlechte Marktstudien</span>{" "}
+                    gekauft?
+                  </h1>
+                  <p className="mb-8 text-xl text-muted-foreground md:text-2xl">
+                    Entdecke, warum 80% der Studien scheitern – und wie du das änderst.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <Badge className="mb-6 bg-primary/10 text-primary hover:bg-primary/20">
+                    <Zap className="mr-2 h-4 w-4" />
+                    Bereit für die Zukunft?
+                  </Badge>
+                  <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+                    Bist du bereit für die{" "}
+                    <span className="text-primary">besten Market Research Agents</span>{" "}
+                    aller Zeiten?
+                  </h1>
+                  <p className="mb-8 text-xl text-muted-foreground md:text-2xl">
+                    Revolutioniere deine Marktforschung mit KI-Präzision – ohne teure Agenturen.
+                  </p>
+                </>
+              )}
+
+              <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+                <Button size="lg" className="text-lg" asChild>
+                  <a href="#quiz">
+                    Starte dein kostenloses Research-Assessment
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </a>
                 </Button>
-              </Link>
-              <Link href="/features">
-                <Button size="lg" variant="outline" className="text-lg px-8">
-                  Features entdecken
-                </Button>
-              </Link>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              ✓ 7 kostenlose Analysen • ✓ 5.000 Credits • ✓ Keine Kreditkarte erforderlich
-            </p>
-          </div>
-        </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-20 bg-background">
-        <div className="container">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground">
-              7 KI-Agenten für Ihre Marktforschung
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Jeder Agent ist spezialisiert auf einen Bereich der Marktforschung und liefert präzise, branchenspezifische Analysen.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {agents.map((agent, index) => {
-              const Icon = agent.icon;
-              return (
-                <Card key={index} className="border-2 hover:border-primary/50 transition-colors">
-                  <CardHeader>
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                      <Icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <CardTitle>{agent.title}</CardTitle>
-                    <CardDescription>{agent.description}</CardDescription>
-                  </CardHeader>
-                </Card>
-              );
-            })}
-          </div>
-
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <Card key={index} className="bg-muted/30">
-                  <CardHeader>
-                    <Icon className="h-8 w-8 text-accent mb-2" />
-                    <CardTitle className="text-xl">{feature.title}</CardTitle>
-                    <CardDescription className="text-base">{feature.description}</CardDescription>
-                  </CardHeader>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-        </section>
-
-        {/* Pricing Section */}
-        <section className="py-20 bg-muted/30">
-        <div className="container">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground">
-              Transparent und fair
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Starten Sie kostenlos mit unserem Freemium-Modell. Upgraden Sie jederzeit für unbegrenzte Analysen.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Freemium */}
-            <Card className="border-2">
-              <CardHeader>
-                <CardTitle className="text-2xl">Freemium</CardTitle>
-                <CardDescription>Perfekt zum Einstieg</CardDescription>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">0€</span>
-                  <span className="text-muted-foreground ml-2">/ User</span>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>7 kostenlose Analysen (alle Agenten)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>5.000 Credits inklusive</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>Automatisierte Briefings</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>2 User pro Firma</span>
-                  </li>
-                </ul>
-                <Link href="/register">
-                  <Button className="w-full">Jetzt starten</Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Professional */}
-            <Card className="border-2 border-primary relative">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
-                Beliebt
               </div>
-              <CardHeader>
-                <CardTitle className="text-2xl">Professional</CardTitle>
-                <CardDescription>Für Teams und Unternehmen</CardDescription>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">99€</span>
-                  <span className="text-muted-foreground ml-2">/ Monat</span>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>Unbegrenzte Analysen</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>50.000 Credits / Monat</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>Prioritäts-Support</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>Team-Kollaboration</span>
-                  </li>
-                </ul>
-                <Link href="/register">
-                  <Button className="w-full">Jetzt upgraden</Button>
-                </Link>
-              </CardContent>
-            </Card>
 
-            {/* Enterprise */}
-            <Card className="border-2">
-              <CardHeader>
-                <CardTitle className="text-2xl">Enterprise</CardTitle>
-                <CardDescription>Für große Organisationen</CardDescription>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">Custom</span>
+              <div className="mt-12 flex items-center justify-center gap-8 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                  <span>Keine Kreditkarte nötig</span>
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>Unbegrenzte User</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>Dedizierter Account Manager</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>Custom Integrationen</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span>SLA & On-Premise Option</span>
-                  </li>
-                </ul>
-                <Button className="w-full" variant="outline">Kontakt aufnehmen</Button>
-              </CardContent>
-            </Card>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                  <span>Ergebnisse in 5 Minuten</span>
+                </div>
+              </div>
+            </div>
           </div>
-
-          <div className="text-center mt-12">
-            <Link href="/pricing">
-              <Button variant="link" className="text-primary">
-                Alle Preisoptionen ansehen →
-              </Button>
-            </Link>
-          </div>
-        </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="py-20 bg-background">
-        <div className="container">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground">
-              Was unsere Kunden sagen
-            </h2>
-          </div>
+        {/* Problem-Amplification Section */}
+        <section className="border-t bg-muted/30 py-20">
+          <div className="container">
+            <div className="mx-auto max-w-4xl">
+              <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">
+                Kennst du diese Frustrationen?
+              </h2>
+              <p className="mb-12 text-center text-lg text-muted-foreground">
+                Stell dir vor, du investierst 5.000 € und bekommst nutzlose Empfehlungen...
+              </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-muted/30">
-                <CardContent className="pt-6">
-                  <p className="text-lg mb-6 italic text-foreground">"{testimonial.quote}"</p>
-                  <div>
-                    <p className="font-semibold text-foreground">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
+              <div className="grid gap-6 md:grid-cols-2">
+                <Card className="border-destructive/20">
+                  <CardHeader>
+                    <div className="flex items-start gap-4">
+                      <div className="rounded-lg bg-destructive/10 p-3">
+                        <DollarSign className="h-6 w-6 text-destructive" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-xl">Teure Studien ohne echte Insights</CardTitle>
+                        <CardDescription className="mt-2">
+                          Traditionelle Agenturen verlangen 10.000-50.000 € für generische Reports,
+                          die nicht zu deinem Business passen.
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+
+                <Card className="border-destructive/20">
+                  <CardHeader>
+                    <div className="flex items-start gap-4">
+                      <div className="rounded-lg bg-destructive/10 p-3">
+                        <Clock className="h-6 w-6 text-destructive" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-xl">Wochenlange Wartezeiten</CardTitle>
+                        <CardDescription className="mt-2">
+                          Während du 4-12 Wochen auf Ergebnisse wartest, hat sich der Markt
+                          bereits verändert. Deine Konkurrenz ist schneller.
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+
+                <Card className="border-destructive/20">
+                  <CardHeader>
+                    <div className="flex items-start gap-4">
+                      <div className="rounded-lg bg-destructive/10 p-3">
+                        <XCircle className="h-6 w-6 text-destructive" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-xl">Ungenaue, veraltete Daten</CardTitle>
+                        <CardDescription className="mt-2">
+                          Studien basieren oft auf Umfragen von vor Monaten. Die Realität sieht
+                          heute völlig anders aus.
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+
+                <Card className="border-destructive/20">
+                  <CardHeader>
+                    <div className="flex items-start gap-4">
+                      <div className="rounded-lg bg-destructive/10 p-3">
+                        <AlertCircle className="h-6 w-6 text-destructive" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-xl">Keine Handlungsempfehlungen</CardTitle>
+                        <CardDescription className="mt-2">
+                          Du bekommst 100 Seiten Theorie, aber keine konkreten Schritte, wie du
+                          dein Business verbessern kannst.
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Quiz/Scorecard Section */}
+        <section id="quiz" className="border-t py-20">
+          <div className="container">
+            <div className="mx-auto max-w-3xl">
+              <div className="mb-12 text-center">
+                <h2 className="mb-4 text-3xl font-bold md:text-4xl">
+                  Wie steht es um deine Marktforschung?
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  Beantworte 5 kurze Fragen und erhalte deine persönliche Bewertung + 3 schnelle Fixes
+                </p>
+              </div>
+
+              {!showResults ? (
+                <Card>
+                  <CardHeader>
+                    <div className="mb-4">
+                      <div className="mb-2 flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">
+                          Frage {quizStep + 1} von {quizQuestions.length}
+                        </span>
+                        <span className="font-medium">
+                          {Math.round(((quizStep + 1) / quizQuestions.length) * 100)}%
+                        </span>
+                      </div>
+                      <Progress value={((quizStep + 1) / quizQuestions.length) * 100} />
+                    </div>
+                    <CardTitle className="text-2xl">
+                      {quizQuestions[quizStep].question}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-3">
+                      {quizQuestions[quizStep].options.map((option, index) => (
+                        <Button
+                          key={index}
+                          variant="outline"
+                          className="h-auto justify-start py-4 text-left"
+                          onClick={() => handleQuizAnswer(index)}
+                        >
+                          <span className="mr-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-sm font-medium">
+                            {index + 1}
+                          </span>
+                          {option}
+                        </Button>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card className="border-primary">
+                  <CardHeader className="text-center">
+                    <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
+                      <span className="text-4xl font-bold text-primary">{calculateScore()}</span>
+                      <span className="text-lg text-muted-foreground">/10</span>
+                    </div>
+                    <CardTitle className={`text-3xl ${getScoreMessage(calculateScore()).color}`}>
+                      {getScoreMessage(calculateScore()).title}
+                    </CardTitle>
+                    <CardDescription className="text-lg">
+                      {getScoreMessage(calculateScore()).message}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Deine 3 schnellen Fixes:</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-3 rounded-lg bg-primary/5 p-4">
+                          <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
+                          <div>
+                            <p className="font-medium">Automatisiere deine Analysen</p>
+                            <p className="text-sm text-muted-foreground">
+                              Nutze KI-Agenten statt manueller Recherche – spare 70% Zeit
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 rounded-lg bg-primary/5 p-4">
+                          <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
+                          <div>
+                            <p className="font-medium">Echtzeit-Daten statt veralteter Reports</p>
+                            <p className="text-sm text-muted-foreground">
+                              Greife auf aktuelle Marktdaten zu, nicht auf 3 Monate alte Umfragen
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 rounded-lg bg-primary/5 p-4">
+                          <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
+                          <div>
+                            <p className="font-medium">Konkrete Handlungsempfehlungen</p>
+                            <p className="text-sm text-muted-foreground">
+                              Erhalte sofort umsetzbare Strategien für dein Business
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 pt-6 border-t">
+                        <Button size="lg" className="w-full" asChild>
+                          <Link href="/register">
+                            Jetzt kostenlos starten
+                            <ArrowRight className="ml-2 h-5 w-5" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Solution & Benefits Section */}
+        <section className="border-t bg-muted/30 py-20">
+          <div className="container">
+            <div className="mx-auto max-w-6xl">
+              <div className="mb-16 text-center">
+                <Badge className="mb-4">Die Lösung</Badge>
+                <h2 className="mb-4 text-3xl font-bold md:text-4xl">
+                  Market Research Agents
+                </h2>
+                <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+                  KI-Agenten, die in Minuten tiefe Insights liefern – präzise, aktuell und
+                  handlungsorientiert
+                </p>
+              </div>
+
+              <div className="grid gap-8 md:grid-cols-3 mb-16">
+                <Card>
+                  <CardHeader>
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                      <Zap className="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle>Automatisierte Analysen</CardTitle>
+                    <CardDescription>
+                      7 spezialisierte KI-Agenten analysieren Märkte, Trends und Wettbewerber
+                      automatisch
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-2 text-sm font-medium text-primary">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Spare 70% Zeit und Kosten
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                      <TrendingUp className="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle>Echtzeit-Insights</CardTitle>
+                    <CardDescription>
+                      Aktuelle Marktdaten statt veralteter Umfragen – immer auf dem neuesten Stand
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-2 text-sm font-medium text-primary">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Ergebnisse in Minuten
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                      <Target className="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle>Handlungsempfehlungen</CardTitle>
+                    <CardDescription>
+                      Konkrete Strategien und nächste Schritte – kein theoretisches Blabla
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-2 text-sm font-medium text-primary">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Sofort umsetzbar
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* How it Works */}
+              <div className="rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 p-8 md:p-12">
+                <h3 className="mb-8 text-center text-2xl font-bold">So funktioniert's</h3>
+                <div className="grid gap-6 md:grid-cols-4">
+                  <div className="text-center">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
+                      1
+                    </div>
+                    <h4 className="mb-2 font-semibold">Registrieren</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Kostenloses Konto erstellen – keine Kreditkarte nötig
+                    </p>
                   </div>
+                  <div className="text-center">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
+                      2
+                    </div>
+                    <h4 className="mb-2 font-semibold">Agent wählen</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Wähle aus 7 spezialisierten Agenten für deine Analyse
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
+                      3
+                    </div>
+                    <h4 className="mb-2 font-semibold">Analyse starten</h4>
+                    <p className="text-sm text-muted-foreground">
+                      KI analysiert Markt, Trends und Wettbewerber automatisch
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
+                      4
+                    </div>
+                    <h4 className="mb-2 font-semibold">Insights nutzen</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Erhalte handlungsorientierte Empfehlungen in Minuten
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Social Proof Section */}
+        <section className="border-t py-20">
+          <div className="container">
+            <div className="mx-auto max-w-6xl">
+              <div className="mb-16 text-center">
+                <h2 className="mb-4 text-3xl font-bold md:text-4xl">
+                  Was unsere Kunden sagen
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  Über 500 Unternehmen vertrauen uns
+                </p>
+              </div>
+
+              <div className="grid gap-8 md:grid-cols-3 mb-12">
+                <Card>
+                  <CardHeader>
+                    <div className="mb-4 flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    <CardDescription className="text-base">
+                      "Dank Market Research Agents haben wir unseren Umsatz um 40% gesteigert.
+                      Die Insights sind präzise und sofort umsetzbar."
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-semibold">
+                        MS
+                      </div>
+                      <div>
+                        <p className="font-semibold">Michael Schmidt</p>
+                        <p className="text-sm text-muted-foreground">CEO, HeidelbergCement GmbH</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <div className="mb-4 flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    <CardDescription className="text-base">
+                      "Wir sparen jetzt 15.000 € pro Quartal und bekommen bessere Ergebnisse
+                      als von traditionellen Agenturen. Absolute Empfehlung!"
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-semibold">
+                        AM
+                      </div>
+                      <div>
+                        <p className="font-semibold">Anna Müller</p>
+                        <p className="text-sm text-muted-foreground">Head of Marketing, Bayer AG</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <div className="mb-4 flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    <CardDescription className="text-base">
+                      "Die Geschwindigkeit ist unglaublich. Wir bekommen in 10 Minuten, wofür
+                      andere Agenturen 6 Wochen brauchen."
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-semibold">
+                        TW
+                      </div>
+                      <div>
+                        <p className="font-semibold">Thomas Weber</p>
+                        <p className="text-sm text-muted-foreground">Strategy Director, Siemens</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Trust Badges */}
+              <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
+                <div className="text-2xl font-bold">HeidelbergCement</div>
+                <div className="text-2xl font-bold">Bayer</div>
+                <div className="text-2xl font-bold">Siemens</div>
+                <div className="text-2xl font-bold">BASF</div>
+                <div className="text-2xl font-bold">Volkswagen</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Offer & Urgency Section */}
+        <section className="border-t bg-gradient-to-br from-primary/10 via-background to-accent/10 py-20">
+          <div className="container">
+            <div className="mx-auto max-w-4xl">
+              <Card className="border-primary shadow-xl">
+                <CardHeader className="text-center">
+                  <Badge className="mb-4 mx-auto bg-destructive text-destructive-foreground">
+                    <Clock className="mr-2 h-4 w-4" />
+                    Limitiertes Angebot
+                  </Badge>
+                  <CardTitle className="text-3xl md:text-4xl">
+                    Jetzt starten: Erstes Assessment gratis
+                  </CardTitle>
+                  <CardDescription className="text-lg">
+                    Nur für die nächsten 100 Besucher – danach regulärer Preis
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="rounded-lg bg-muted p-6">
+                    <div className="mb-4 flex items-baseline gap-2">
+                      <span className="text-4xl font-bold">99 €</span>
+                      <span className="text-muted-foreground">/Monat</span>
+                      <Badge variant="outline" className="ml-auto">Freemium verfügbar</Badge>
+                    </div>
+                    <ul className="space-y-3">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-5 w-5 text-primary" />
+                        <span>2 kostenlose Analysen pro Monat</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-5 w-5 text-primary" />
+                        <span>Zugriff auf alle 7 KI-Agenten</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-5 w-5 text-primary" />
+                        <span>Echtzeit-Marktdaten</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-5 w-5 text-primary" />
+                        <span>Handlungsempfehlungen</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="flex items-center gap-4 rounded-lg bg-primary/5 p-4">
+                    <Shield className="h-8 w-8 text-primary" />
+                    <div>
+                      <p className="font-semibold">100% Money-Back Garantie</p>
+                      <p className="text-sm text-muted-foreground">
+                        Nicht zufrieden? Geld zurück – ohne Fragen
+                      </p>
+                    </div>
+                  </div>
+
+                  <Button size="lg" className="w-full text-lg" asChild>
+                    <Link href="/register">
+                      Jetzt kostenlos starten
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+
+                  <p className="text-center text-sm text-muted-foreground">
+                    Keine Kreditkarte erforderlich • Jederzeit kündbar
+                  </p>
                 </CardContent>
               </Card>
-            ))}
+            </div>
           </div>
-        </div>
         </section>
 
-        {/* FAQ */}
-        <section className="py-20 bg-muted/30">
-        <div className="container">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground">
-              Häufig gestellte Fragen
-            </h2>
-          </div>
+        {/* Final CTA Section */}
+        <section className="border-t py-20">
+          <div className="container">
+            <div className="mx-auto max-w-3xl text-center">
+              {variant === "frustration" ? (
+                <>
+                  <h2 className="mb-6 text-3xl font-bold md:text-4xl">
+                    Schluss mit schlechten Marktstudien
+                  </h2>
+                  <p className="mb-8 text-lg text-muted-foreground">
+                    Starte jetzt mit KI-basierter Marktforschung und spare Zeit, Geld und Nerven
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="mb-6 text-3xl font-bold md:text-4xl">
+                    Bereit? Jetzt loslegen!
+                  </h2>
+                  <p className="mb-8 text-lg text-muted-foreground">
+                    Werde Teil der 500+ Unternehmen, die bereits mit Market Research Agents arbeiten
+                  </p>
+                </>
+              )}
 
-          <div className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible className="space-y-4">
-              {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="bg-background border rounded-lg px-6">
-                  <AccordionTrigger className="text-left font-semibold hover:no-underline">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        </div>
-        </section>
-
-        {/* Final CTA */}
-        <section className="py-20 bg-gradient-to-br from-primary/10 via-background to-accent/10">
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground">
-              Bereit für datengetriebene Entscheidungen?
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Starten Sie jetzt kostenlos und erhalten Sie 7 Analysen plus 5.000 Credits.
-            </p>
-            <Link href="/register">
-              <Button size="lg" className="text-lg px-8">
-                Jetzt kostenlos starten
-                <ArrowRight className="ml-2 h-5 w-5" />
+              <Button size="lg" className="text-lg" asChild>
+                <Link href="/register">
+                  Kostenlos starten
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
-            </Link>
+            </div>
           </div>
-        </div>
         </section>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 }

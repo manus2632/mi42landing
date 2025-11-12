@@ -63,3 +63,14 @@
 - [x] Email-Verifizierung implementieren
 - [x] Freemium-Exhaustion-Page mit API verbinden
 - [x] Auf Server deployen und testen
+
+## Scorecard-Marketing Design-Update (Daniel Priestley)
+- [x] A/B-Test-Varianten für Headlines implementieren (Frustration vs. Readiness)
+- [x] Hero-Section mit neuem CTA umgestalten
+- [x] Problem-Amplification Section erstellen
+- [x] 5-Fragen-Quiz mit Scorecard integrieren
+- [x] Solution & Benefits Section überarbeiten
+- [x] Social Proof Section mit Testimonials
+- [x] Offer & Urgency Section mit Countdown-Timer
+- [x] Final CTA Section
+- [x] Auf Server deployen
