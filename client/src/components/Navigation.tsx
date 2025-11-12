@@ -18,12 +18,11 @@ export default function Navigation() {
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
       <div className="container">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-24 items-center justify-between">
           {/* Logo */}
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-8 w-8" />
-              <span className="text-xl font-bold text-foreground">{APP_TITLE}</span>
+              <img src={APP_LOGO} alt={APP_TITLE} className="h-20" />
             </div>
           </Link>
 

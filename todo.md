@@ -85,3 +85,10 @@
 - [x] Schriftfarbe dunkler machen
 - [x] Buttons auf Schwarz ändern
 - [x] Auf Server deployen
+
+## Landing Page Feinschliff
+- [x] "besten Market Research Agents" auch in Readiness-Variante rot färben
+- [x] Subheadline für "sofort ready" anpassen
+- [x] Doppelte Kopfzeile entfernen ("Mi42 Landing Page" weg)
+- [x] Logo 10x vergrößern
+- [x] Auf Server deployen
