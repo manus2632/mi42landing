@@ -47,3 +47,9 @@
 - [x] Finale Überprüfung aller Features
 - [x] Checkpoint erstellen
 - [x] Dokumentation vervollständigen
+
+## Design-Update (Claude.ai inspiriert)
+- [x] Farbschema anpassen (Beige/Terracotta statt Blau/Orange)
+- [x] Typografie vereinfachen und cleaner gestalten
+- [x] Spacing und Padding optimieren
+- [x] Auf Server deployen
