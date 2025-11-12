@@ -79,3 +79,9 @@
 - [x] Minimalistisches Logo im Stil von SpaceX/Grok/Claude erstellen
 - [x] Logo in Landing Page integrieren
 - [x] Auf Server deployen
+
+## Farbanpassung an Claude.ai
+- [x] Hintergrund von Rosa auf Creme ändern
+- [x] Schriftfarbe dunkler machen
+- [x] Buttons auf Schwarz ändern
+- [x] Auf Server deployen
