@@ -47,7 +47,7 @@ export default function Navigation() {
               <Button variant="ghost">Anmelden</Button>
             </Link>
             <Link href="/register">
-              <Button>Kostenlos starten</Button>
+              <Button>Erste Analyse in 5 Minuten starten</Button>
             </Link>
           </div>
 
@@ -89,7 +89,7 @@ export default function Navigation() {
                 </Link>
                 <Link href="/register">
                   <Button className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                    Kostenlos starten
+                    Erste Analyse in 5 Minuten starten
                   </Button>
                 </Link>
               </div>

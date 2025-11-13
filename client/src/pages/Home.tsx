@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import { useABTest, trackEvent } from "@/hooks/useABTest";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -33,10 +34,8 @@ import {
 } from "lucide-react";
 
 export default function Home() {
-  // A/B Test: Wechsle zwischen "frustration" und "readiness"
-  const [variant] = useState<"frustration" | "readiness">(
-    Math.random() > 0.5 ? "frustration" : "readiness"
-  );
+  // A/B Test mit localStorage-Persistenz
+  const { variant } = useABTest();
 
   const [quizStep, setQuizStep] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
@@ -666,9 +665,14 @@ export default function Home() {
                 </>
               )}
 
-              <Button size="lg" className="text-lg" asChild>
+              <Button 
+                size="lg" 
+                className="text-lg" 
+                asChild
+                onClick={() => trackEvent(variant, "cta_click")}
+              >
                 <Link href="/register">
-                  Kostenlos starten
+                  Erste Analyse in 5 Minuten starten
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>

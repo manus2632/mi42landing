@@ -106,3 +106,13 @@
 ## Mobile Logo-Anpassung
 - [x] Logo-Größe responsive machen (h-12 bei <768px)
 - [x] Deployen
+
+## CTA-Button-Text-Optimierung
+- [x] 'Kostenlos starten' → 'Erste Analyse in 5 Minuten starten'
+- [x] Deployen
+
+## Minimales A/B-Test-System
+- [x] localStorage-Persistenz für Varianten
+- [x] Event-Tracking (Impressions, Klicks, Conversions)
+- [x] Admin-Panel für Auswertung (/ab-test-stats)
+- [x] Deployen

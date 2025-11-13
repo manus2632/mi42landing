@@ -15,6 +15,7 @@ import Register from "./pages/Register";
 import RegisterExhausted from "./pages/RegisterExhausted";
 import VerifyEmail from "./pages/VerifyEmail";
 import Login from "./pages/Login";
+import ABTestStats from "./pages/ABTestStats";
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function Router() {
         <Route path="/register/exhausted" component={RegisterExhausted} />
         <Route path="/verify-email" component={VerifyEmail} />
         <Route path="/login" component={Login} />
+        <Route path="/ab-test-stats" component={ABTestStats} />
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
         <Route component={NotFound} />
