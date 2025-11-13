@@ -97,3 +97,8 @@
 - [x] Hintergrundfarbe auf #FAF9F5 ändern
 - [x] Headline-Schriftart auf Serif (wie Claude.ai) ändern
 - [x] Auf Server deployen
+
+## Logo-Update - Fett und Schwarz
+- [x] Neues Logo erstellen (fett, fast schwarz)
+- [x] Logo integrieren
+- [x] Deployen
