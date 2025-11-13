@@ -97,3 +97,13 @@
 - [x] Hintergrundfarbe auf #FAF9F5 ändern
 - [x] Headline-Schriftart auf Serif (wie Claude.ai) ändern
 - [x] Auf Server deployen
+
+## Wissenschaftlich optimiertes Farbschema (Blau-Cyan-Magenta)
+- [x] Backup der aktuellen Version erstellen (Claude-Style Checkpoint: bf6f2224)
+- [x] Hintergrund auf #F8FAFC ändern (helles Blau-Grau)
+- [x] Primär-Buttons auf #2563EB ändern (tiefes Blau)
+- [x] Akzente auf #06B6D4 ändern (Cyan)
+- [x] Headline-Highlight auf #EC4899 ändern (Magenta)
+- [x] Inter-Font von Google Fonts einbinden
+- [x] Typografie auf Inter umstellen (Headlines + Body)
+- [x] Auf Server deployen
