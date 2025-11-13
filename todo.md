@@ -107,3 +107,10 @@
 - [x] Inter-Font von Google Fonts einbinden
 - [x] Typografie auf Inter umstellen (Headlines + Body)
 - [x] Auf Server deployen
+
+## CSS-Loading und Logo-Update
+- [x] CSS-Build-Problem analysieren
+- [x] CSS korrekt in dist-Ordner prüfen
+- [x] Neues Logo im Blau-Cyan-Schema erstellen
+- [x] Logo integrieren
+- [x] Auf Server deployen und testen
