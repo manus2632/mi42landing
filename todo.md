@@ -102,3 +102,7 @@
 - [x] Neues Logo erstellen (fett, fast schwarz)
 - [x] Logo integrieren
 - [x] Deployen
+
+## Mobile Logo-Anpassung
+- [x] Logo-Größe responsive machen (h-12 bei <768px)
+- [x] Deployen

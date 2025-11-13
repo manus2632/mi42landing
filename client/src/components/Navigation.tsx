@@ -22,7 +22,7 @@ export default function Navigation() {
           {/* Logo */}
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-20" />
+              <img src={APP_LOGO} alt={APP_TITLE} className="h-12 md:h-20" />
             </div>
           </Link>
 
