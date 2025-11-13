@@ -47,7 +47,8 @@ export default function Navigation() {
               <Button variant="ghost">Anmelden</Button>
             </Link>
             <Link href="/register">
-              <Button>Erste Analyse in 5 Minuten starten</Button>
+              <Button className="hidden md:inline-flex">Erste Analyse in 5 Minuten starten</Button>
+              <Button className="md:hidden">Jetzt starten</Button>
             </Link>
           </div>
 
@@ -89,7 +90,7 @@ export default function Navigation() {
                 </Link>
                 <Link href="/register">
                   <Button className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                    Erste Analyse in 5 Minuten starten
+                    Jetzt starten
                   </Button>
                 </Link>
               </div>

@@ -116,3 +116,10 @@
 - [x] Event-Tracking (Impressions, Klicks, Conversions)
 - [x] Admin-Panel für Auswertung (/ab-test-stats)
 - [x] Deployen
+
+## Mobile-Ansicht Bugs (13.11.2024)
+- [x] Doppeltes Header-Menü auf Mobile entfernen
+- [x] CTA-Button-Text kürzen (aktuell abgeschnitten: "Erste Analyse in 5 Minuten starten")
+
+## Hero-CTA-Button-Text Optimierung (13.11.2024)
+- [x] Hero-CTA-Button-Text auf Englisch ändern (kürzer für Mobile)

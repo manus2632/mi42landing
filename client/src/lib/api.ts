@@ -22,7 +22,7 @@ export const api = {
   async checkFreemiumAvailability(email: string) {
     const input = encodeURIComponent(JSON.stringify(formatTRPCRequest({ email })));
     const response = await apiClient.get(`/auth.checkFreemiumAvailability?input=${input}`);
-    return response.data[0].result.data.json;
+    return response.data.result.data.json;
   },
 
   // Benutzer registrieren
@@ -36,7 +36,7 @@ export const api = {
     const response = await apiClient.post('/auth.register', 
       formatTRPCRequest(data)
     );
-    return response.data[0].result.data.json;
+    return response.data.result.data.json;
   },
 
   // Email verifizieren
@@ -44,14 +44,14 @@ export const api = {
     const response = await apiClient.post('/auth.verifyEmail', 
       formatTRPCRequest({ token })
     );
-    return response.data[0].result.data.json;
+    return response.data.result.data.json;
   },
 
   // Freemium-User einer Domain abrufen (Query = GET)
   async getFreemiumUsers(domain: string) {
     const input = encodeURIComponent(JSON.stringify(formatTRPCRequest({ domain })));
     const response = await apiClient.get(`/auth.getFreemiumUsers?input=${input}`);
-    return response.data[0].result.data.json;
+    return response.data.result.data.json;
   },
 
   // Login
@@ -59,14 +59,14 @@ export const api = {
     const response = await apiClient.post('/auth.login', 
       formatTRPCRequest({ username, password })
     );
-    return response.data[0].result.data.json;
+    return response.data.result.data.json;
   },
 };
 
 // Error-Handler
 export function handleAPIError(error: any): string {
   if (axios.isAxiosError(error)) {
-    const errorData = error.response?.data?.[0]?.error;
+    const errorData = error.response?.data?.error;
     if (errorData) {
       const code = errorData.json?.code || errorData.code;
       const message = errorData.json?.message || errorData.message;

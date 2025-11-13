@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getABTestStats } from "@/hooks/useABTest";
-import Navigation from "@/components/Navigation";
+
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ export default function ABTestStats() {
 
   return (
     <>
-      <Navigation />
+
       <main className="min-h-screen bg-background py-12">
         <div className="container max-w-4xl">
           <h1 className="text-4xl font-bold mb-8">A/B Test Statistiken</h1>

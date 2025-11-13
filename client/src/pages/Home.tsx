@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import Navigation from "@/components/Navigation";
+
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import {
@@ -93,7 +93,7 @@ export default function Home() {
         title="Market Research Agents - KI-basierte Marktforschung"
         description="Revolutioniere deine Marktforschung mit KI-Präzision. Spare 70% Zeit und Kosten gegenüber traditionellen Studien."
       />
-      <Navigation />
+
 
       <main className="min-h-screen">
         {/* Hero Section mit A/B-Test-Varianten */}
@@ -135,7 +135,8 @@ export default function Home() {
               <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                 <Button size="lg" className="text-lg" asChild>
                   <a href="#quiz">
-                    Starte dein kostenloses Research-Assessment
+                    <span className="hidden sm:inline">Starte dein kostenloses Research-Assessment</span>
+                    <span className="sm:hidden">Start Free Assessment</span>
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </a>
                 </Button>
