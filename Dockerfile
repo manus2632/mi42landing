@@ -2,13 +2,9 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Copy built files
+# Copy built files and dependencies
 COPY dist /app/dist
-COPY package.json /app/
-COPY pnpm-lock.yaml /app/
-
-# Install production dependencies
-RUN npm install -g pnpm && pnpm install --prod
+COPY node_modules /app/node_modules
 
 # Expose port
 EXPOSE 3002

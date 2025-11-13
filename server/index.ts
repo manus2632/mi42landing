@@ -16,11 +16,17 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
-  app.use(express.static(staticPath));
+  // Serve static files under /landing path
+  app.use("/landing", express.static(staticPath));
 
-  // Handle client-side routing - serve index.html for all routes
-  app.get("*", (_req, res) => {
+  // Handle client-side routing - serve index.html for /landing routes
+  app.get("/landing*", (_req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
+  });
+
+  // Fallback for root path (redirect to /landing)
+  app.get("/", (_req, res) => {
+    res.redirect("/landing");
   });
 
   const port = process.env.PORT || 3002;
