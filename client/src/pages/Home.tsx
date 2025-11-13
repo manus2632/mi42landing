@@ -109,7 +109,7 @@ export default function Home() {
                   </Badge>
                   <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
                     Hast du genug{" "}
-                    <span className="text-[#EC4899]">schlechte Marktstudien</span>{" "}
+                    <span className="text-destructive">schlechte Marktstudien</span>{" "}
                     gekauft?
                   </h1>
                   <p className="mb-8 text-xl text-muted-foreground md:text-2xl">
@@ -124,7 +124,7 @@ export default function Home() {
                   </Badge>
                   <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
                     Bist du bereit für die{" "}
-                    <span className="text-[#EC4899]">besten Market Research Agents</span>{" "}
+                    <span className="text-destructive">besten Market Research Agents</span>{" "}
                     aller Zeiten?
                   </h1>
                   <p className="mb-8 text-xl text-muted-foreground md:text-2xl">
