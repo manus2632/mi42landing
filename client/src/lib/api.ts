@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://46.224.9.190:3001/api/trpc';
+const API_URL = 'https://mi42.bl2020.com/api/trpc';
 
 // Axios-Instanz mit Credentials
 const apiClient = axios.create({
@@ -11,18 +11,17 @@ const apiClient = axios.create({
   },
 });
 
-// tRPC-Format: { "0": { "json": { ...data } } }
+// tRPC-Format: { "json": { ...data } }
 function formatTRPCRequest(data: any) {
-  return { "0": { "json": data } };
+  return { "json": data };
 }
 
 // API-Funktionen
 export const api = {
-  // Freemium-Verfügbarkeit prüfen
+  // Freemium-Verfügbarkeit prüfen (Query = GET)
   async checkFreemiumAvailability(email: string) {
-    const response = await apiClient.post('/auth.checkFreemiumAvailability', 
-      formatTRPCRequest({ email })
-    );
+    const input = encodeURIComponent(JSON.stringify(formatTRPCRequest({ email })));
+    const response = await apiClient.get(`/auth.checkFreemiumAvailability?input=${input}`);
     return response.data[0].result.data.json;
   },
 
@@ -48,11 +47,10 @@ export const api = {
     return response.data[0].result.data.json;
   },
 
-  // Freemium-User einer Domain abrufen
+  // Freemium-User einer Domain abrufen (Query = GET)
   async getFreemiumUsers(domain: string) {
-    const response = await apiClient.post('/auth.getFreemiumUsers', 
-      formatTRPCRequest({ domain })
-    );
+    const input = encodeURIComponent(JSON.stringify(formatTRPCRequest({ domain })));
+    const response = await apiClient.get(`/auth.getFreemiumUsers?input=${input}`);
     return response.data[0].result.data.json;
   },
 
