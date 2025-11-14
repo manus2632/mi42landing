@@ -123,3 +123,6 @@
 
 ## Hero-CTA-Button-Text Optimierung (13.11.2024)
 - [x] Hero-CTA-Button-Text auf Englisch ändern (kürzer für Mobile)
+
+## Logo-Problem Mobile (13.11.2024)
+- [x] Logo erscheint nicht auf Mobile-Phone (nur Placeholder-Icon) - optimiert von 2.1 MB auf 91 KB
