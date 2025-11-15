@@ -1,0 +1,83 @@
+name: Deploy to Hetzner
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Manueller Trigger über GitHub UI
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      
+      - name: Install pnpm
+        run: npm install -g pnpm
+      
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build Project
+        run: NODE_ENV=production pnpm run build
+        
+      - name: Create Deployment Archive
+        run: tar -czf mi42-landing-deploy.tar.gz dist node_modules Dockerfile
+      
+      - name: Deploy to Hetzner Server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.HETZNER_SSH_KEY }}
+          SERVER_IP: ${{ secrets.HETZNER_SERVER_IP }}
+          SERVER_USER: manus
+        run: |
+          # SSH-Key einrichten
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+          
+          # Archiv auf Server kopieren
+          scp mi42-landing-deploy.tar.gz $SERVER_USER@$SERVER_IP:~/projects/mi42-landing/
+          
+          # Deployment auf Server ausführen
+          ssh $SERVER_USER@$SERVER_IP << 'ENDSSH'
+            # Stoppe alten Container
+            docker stop mi42-landing || true
+            docker rm mi42-landing || true
+            
+            # Entpacke neuen Code
+            cd ~/projects/mi42-landing
+            tar -xzf mi42-landing-deploy.tar.gz
+            
+            # Baue neues Docker-Image
+            echo '${{ secrets.MANUS_PASSWORD }}' | sudo -S docker build -t mi42-landing:manus-deploy .
+            
+            # Starte neuen Container
+            echo '${{ secrets.MANUS_PASSWORD }}' | sudo -S docker stop mi42-landing || true
+            echo '${{ secrets.MANUS_PASSWORD }}' | sudo -S docker rm mi42-landing || true
+            echo '${{ secrets.MANUS_PASSWORD }}' | sudo -S docker run -d \
+              --name mi42-landing \
+              -p 3002:3002 \
+              --restart unless-stopped \
+              mi42-landing:manus-deploy
+            
+            # Cleanup
+            echo '${{ secrets.MANUS_PASSWORD }}' | sudo -S docker image prune -f
+            
+            echo "Deployment erfolgreich!"
+          ENDSSH
+      
+      - name: Verify Deployment
+        env:
+          SERVER_IP: ${{ secrets.HETZNER_SERVER_IP }}
+        run: |
+          sleep 5
+          curl -f https://mi42.bl2020.com/landing/ || exit 1
+          echo "Landing-Page ist erreichbar!"
