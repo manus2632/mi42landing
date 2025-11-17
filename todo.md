@@ -126,3 +126,9 @@
 
 ## Logo-Problem Mobile (13.11.2024)
 - [x] Logo erscheint nicht auf Mobile-Phone (nur Placeholder-Icon) - optimiert von 2.1 MB auf 91 KB
+
+## Mi42 App IP-Änderung (14.11.2024)
+- [x] Neue IP: 188.245.51.157 (alte: 46.224.9.190)
+- [x] API-URLs prüfen (aktuell: https://mi42.bl2020.com/api/trpc - funktioniert weiterhin)
+- [x] Dokumentation aktualisieren
+- [x] GitHub Secrets Anleitung aktualisieren
